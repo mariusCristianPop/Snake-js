@@ -8,7 +8,7 @@ function setup() {
     x = width / 2
     y = height / 2
     snakeSpeed = 1.05
-    direction = "right"
+    direction = ""
 }
 
 // Draws the circle
@@ -39,11 +39,11 @@ function draw() {
 // Changes the position of the circle based on keys pressed
 function keyPressed() {
     if (keyCode === UP_ARROW) {
-        if (direction == "left" || direction == "right") {
+        if (direction == "left" || direction == "right" || direction == "") {
             direction = "up"
         }
     } else if (keyCode === DOWN_ARROW) {
-        if (direction == "left" || direction == "right") {
+        if (direction == "left" || direction == "right" || direction == "") {
             direction = "down"
         }
     }
@@ -52,7 +52,7 @@ function keyPressed() {
             direction = "left"
         }
     } else if (keyCode === RIGHT_ARROW) {
-        if (direction == "up" || direction == "down") {
+        if (direction == "up" || direction == "down" || direction == "") {
             direction = "right"
         }
     }
