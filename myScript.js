@@ -1,5 +1,8 @@
-var x, y, snakeSpeed, direction
-
+var x, y, snakeSpeed, direction, generateFood
+var snakeFood = {
+    x: 100,
+    y: 50,
+}
 function setup() {
     //createCanvas(800, 600);
     var cnv = createCanvas(windowWidth - 50, windowHeight - 50);
@@ -9,6 +12,7 @@ function setup() {
     y = height / 2
     snakeSpeed = 1.05
     direction = ""
+    generateFood = true;
 }
 
 // Draws the circle
@@ -33,6 +37,14 @@ function draw() {
     } 
     if (direction == "down") {
         y += snakeSpeed
+    }
+    if (generateFood) {
+        generateFood = false;
+        snakeFood.x = random (0, width - 30);
+        snakeFood.y = random (0, height - 30);
+        ellipse(snakeFood.x, snakeFood.y, 15, 15);
+    } else {
+        ellipse(snakeFood.x, snakeFood.y, 15, 15);
     }
 }
 
