@@ -13,15 +13,17 @@ function setup() {
 
 // Draws the circle
 function draw() {
-    console.log(wallX + " + " + floor(x))
     background(200)
     // Draw a circle
     stroke(50)
     fill(100)
     ellipse(x, y, 24, 24)
+    if (x > width || x < 0 || y < 0 || y > height) {
+        console.log("Game over")
+        noLoop()
+    }
     if (direction == "right") {
         x += snakeSpeed
-        
     }
     if (direction == "up") {
         y -= snakeSpeed
@@ -32,10 +34,6 @@ function draw() {
     if (direction == "down") {
         y += snakeSpeed
     }
-    if (x == windowHeight - 50) {
-        console.log(x)
-    }
-   
 }
 
 // Changes the position of the circle based on keys pressed
