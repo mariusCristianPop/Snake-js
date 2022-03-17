@@ -46,6 +46,7 @@ function draw() {
     } else {
         ellipse(snakeFood.x, snakeFood.y, 15, 15);
     }
+    hit = collidePointEllipse(snakeFood.x, snakeFood.y, x, y, 24, 24)
     if (hit) {
         generateFood = true;
         console.log("collision")
