@@ -46,6 +46,10 @@ function draw() {
     } else {
         ellipse(snakeFood.x, snakeFood.y, 15, 15);
     }
+    if (hit) {
+        generateFood = true;
+        console.log("collision")
+    }
 }
 
 // Changes the position of the circle based on keys pressed
