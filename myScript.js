@@ -14,7 +14,6 @@ var snakeFood = {
     width: snake.width / 2,
     height: snake.height / 2,
 }
-
 function setup() {
     //createCanvas(800, 600);
     var cnv = createCanvas(windowWidth - 50, windowHeight - 50);
@@ -40,16 +39,16 @@ function draw() {
         noLoop()
     }
     if (direction == "right") {
-        x += snakeSpeed
+        snake.x += snakeSpeed
     }
     if (direction == "up") {
-        y -= snakeSpeed
+        snake.y -= snakeSpeed
     } 
     if (direction == "left") {
-        x -= snakeSpeed
+        snake.x -= snakeSpeed
     } 
     if (direction == "down") {
-        y += snakeSpeed
+        snake.y += snakeSpeed
     }
     if (generateFood) {
         generateFood = false;
@@ -59,8 +58,9 @@ function draw() {
     } else {
         ellipse(snakeFood.x, snakeFood.y, snakeFood.height, snakeFood.width);
     }
-    hit = collidePointEllipse(snakeFood.x, snakeFood.y, snake.x, snake.y, snake.height, snake.width)
+    hit = collidePointEllipse(snakeFood.x, snakeFood.y, snake.x, snake.y, 24, 24)
     if (hit) {
+        snakeLength += 10
         generateFood = true;
         console.log("collision")
     }
@@ -68,7 +68,7 @@ function draw() {
         snakePositions.shift();
    }
     for (let i = 0; i < snakePositions.length; i +=1) { // draw the snake's tail
-        ellipse(snakePositions[i].x, snakePositions[i].y, snake.height, snake.width);
+        ellipse(snakePositions[i].x, snakePositions[i].y, 24, 24);
     }
 }
 
