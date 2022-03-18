@@ -1,8 +1,20 @@
 var x, y, snakeSpeed, direction, generateFood
+var snakePositions = [];
+var snakeLength = 1
+var snake = {
+    x: 100,
+    y: 50,
+    width: 20,
+    height:20,
+}
+
 var snakeFood = {
     x: 100,
     y: 50,
+    width: snake.width / 2,
+    height: snake.height / 2,
 }
+
 function setup() {
     //createCanvas(800, 600);
     var cnv = createCanvas(windowWidth - 50, windowHeight - 50);
@@ -21,8 +33,9 @@ function draw() {
     // Draw a circle
     stroke(50)
     fill(100)
-    ellipse(x, y, 24, 24)
-    if (x > width || x < 0 || y < 0 || y > height) {
+    ellipse(snake.x, snake.y, snake.width, snake.height)
+    snakePositions.push({x:snake.x, y:snake.y})
+    if (snake.x > width || snake.x < 0 || snake.y < 0 || snake.y > height) {
         console.log("Game over")
         noLoop()
     }
@@ -44,12 +57,18 @@ function draw() {
         snakeFood.y = random (0, height - 30);
         ellipse(snakeFood.x, snakeFood.y, 15, 15);
     } else {
-        ellipse(snakeFood.x, snakeFood.y, 15, 15);
+        ellipse(snakeFood.x, snakeFood.y, snakeFood.height, snakeFood.width);
     }
-    hit = collidePointEllipse(snakeFood.x, snakeFood.y, x, y, 24, 24)
+    hit = collidePointEllipse(snakeFood.x, snakeFood.y, snake.x, snake.y, snake.height, snake.width)
     if (hit) {
         generateFood = true;
         console.log("collision")
+    }
+    if (snakePositions.length > snakeLength) { // "cut from the tail based on current length"
+        snakePositions.shift();
+   }
+    for (let i = 0; i < snakePositions.length; i +=1) { // draw the snake's tail
+        ellipse(snakePositions[i].x, snakePositions[i].y, snake.height, snake.width);
     }
 }
 
