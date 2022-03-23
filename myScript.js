@@ -13,17 +13,11 @@ var snake = {
     }
   };
 
-
-function addToTail() {
+  // Defining what appears on the canvas when the page loads
+  function setup() {
+    createCanvas(800, 600);
+    background(64);
     for (let i = 0; i < 5; ++i) {
-        snake.growTail(i, i + 1);
+        ellipse(snake.x += 10, snake.y, 20, 20);
     }
 }
-
-function removeFromTail() {
-    snake.shrinkTail();
-}
-
-addToTail();
-removeFromTail();
-console.log(snake.tail)
