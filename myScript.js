@@ -1,4 +1,7 @@
-var bodySquareSize = 24
+var bodySquareSize = 24, generateFood = true
+const CANVAS_WIDTH = 800
+const CANVAS_HEIGHT = 600
+
 // created the snake object with it's proprieties and methods
 const snake = new Object();
 snake.x = 100;
@@ -14,15 +17,17 @@ snake.growTail = function(x, y) { // method show
         //console.log(`Added to tail: ${x}, ${y}`);
 }
 
-
-  // p5.js setup function
-  function setup() {
-    createCanvas(800, 600);
+//create food object
+const snakeFood = new Object();
+snakeFood.x = 100
+snakeFood.y = 150
+// p5.js setup function
+function setup() {
+    createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     background(64);
     for (let i = 0; i < 5; ++i) {
         snake.growTail(snake.x += bodySquareSize, snake.y)
     }
-    snake.direction = ""
     frameRate(5)
 }
 // p5.js draw function
@@ -31,8 +36,10 @@ function draw() {
     background(64)
     stroke(50)
     fill(255)
+    foodGenerator()
     snakesDirection()
     snakeMoves()
+    
      
 }
 
@@ -105,5 +112,16 @@ function keyPressed() {
             snake.direction = "right"
             snakesDirection()
         }
+    }
+}
+
+function foodGenerator() {
+    if (generateFood) {
+        generateFood = false;
+        snakeFood.x = random(0, CANVAS_WIDTH - 30);
+        snakeFood.y = random(0, CANVAS_HEIGHT - 30);
+        ellipse(snakeFood.x, snakeFood.y, 15, 15);
+    } else {
+        ellipse(snakeFood.x, snakeFood.y, 15, 15);
     }
 }
