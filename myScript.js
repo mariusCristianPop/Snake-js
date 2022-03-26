@@ -1,51 +1,56 @@
-var generateFood = true
 const BODY_SIZE = 24
 const FOOD_SIZE = BODY_SIZE
 const CANVAS_WIDTH = 800
 const CANVAS_HEIGHT = 600
+const INITIAL_XY = 100
+const SNAKE_SPEED = 25
+const SNAKE_INITIAL_BODY_LENGTH = 5
+const CANVAS_BACKGROUND = 64
+const CANVAS_BORDER = 20
 
-// created the snake object with it's proprieties and methods
-const snake = new Object();
-snake.x = 100;
-snake.y = 100;
-snake.speed = 25;
-snake.tailArr = [];
-snake.direction = "";
-snake.bodyLength = 5;
+var generateFood = true
+
+// created the snake object
+const snake = new Object()
+snake.x = INITIAL_XY
+snake.y = INITIAL_XY
+snake.speed = SNAKE_SPEED
+snake.tailArr = []
+snake.direction = ""
+snake.bodyLength = SNAKE_INITIAL_BODY_LENGTH
 snake.bodySize = BODY_SIZE
-snake.growTail = function(x, y) { // method show
-        x = Math.floor(x)
-        y = Math.floor(y)
-        this.tailArr.push({x:x, y:y})
-        //console.log(`Added to tail: ${x}, ${y}`);
+snake.growTail = function(x, y) {
+    x = Math.floor(x)
+    y = Math.floor(y)
+    this.tailArr.push({x:x, y:y})
 }
 
-//create food object
-const snakeFood = new Object();
-snakeFood.x = 100
-snakeFood.y = 150
+// create food object
+const snakeFood = new Object()
+snakeFood.x = INITIAL_XY
+snakeFood.y = INITIAL_XY
 snakeFood.r = FOOD_SIZE / 2
+
 // p5.js setup function
 function setup() {
-    createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-    background(64);
-    for (let i = 0; i < 5; ++i) {
+    createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT)
+    background(CANVAS_BACKGROUND)
+    for (let i = 0; i < SNAKE_INITIAL_BODY_LENGTH; ++i) { // make the snake appear on the page right after page loads
         snake.growTail(snake.x += BODY_SIZE, snake.y)
     }
     frameRate(5)
 }
+
 // p5.js draw function
 function draw() {
     lifeCheck()
     eatFood()
-    background(64)
+    background(CANVAS_BACKGROUND)
     stroke(50)
     fill(255)
     foodGenerator()
     snakesDirection()
     snakeMoves()
-    console.log(`Snake tail length: ${snake.tailArr.length}`)
-    console.log(`Snake tail size: ${snake.bodyLength}`)
 }
 
 // Draw the snake's tail
@@ -54,10 +59,8 @@ function snakeMoves() {
         snake.tailArr.shift()
     }
     for (let i = 0; i < snake.tailArr.length; ++i) {
-        //console.log("drawing")
-        ellipse(snake.tailArr[i].x, snake.tailArr[i].y, BODY_SIZE, BODY_SIZE);
+        ellipse(snake.tailArr[i].x, snake.tailArr[i].y, BODY_SIZE, BODY_SIZE)
     }
-    
 }
 
 // Grow the snake based on the direction 
@@ -121,11 +124,12 @@ function keyPressed() {
     }
 }
 
+// Generate food
 function foodGenerator() {
     if (generateFood) {
         generateFood = false;
-        snakeFood.x = random(20, CANVAS_WIDTH - 20);
-        snakeFood.y = random(20, CANVAS_HEIGHT - 20);
+        snakeFood.x = random(CANVAS_BORDER, CANVAS_WIDTH - CANVAS_BORDER)
+        snakeFood.y = random(CANVAS_BORDER, CANVAS_HEIGHT - CANVAS_BORDER)
         let counter = 0
         for (let i = 0; i < snake.tailArr.length; ++ i) {
             let d = dist(snakeFood.x, snakeFood.y, snake.tailArr[i].x, snake.tailArr[i].y)
@@ -139,14 +143,16 @@ function foodGenerator() {
                 }
             }
         }
-        ellipse(snakeFood.x, snakeFood.y, FOOD_SIZE, FOOD_SIZE);
+        ellipse(snakeFood.x, snakeFood.y, FOOD_SIZE, FOOD_SIZE)
     } else {
-        ellipse(snakeFood.x, snakeFood.y, FOOD_SIZE, FOOD_SIZE);
+        ellipse(snakeFood.x, snakeFood.y, FOOD_SIZE, FOOD_SIZE)
     }
 }
 
+// Eating food
 function eatFood() {
-    let hit = collidePointEllipse(snakeFood.x, snakeFood.y, snake.tailArr[snake.tailArr.length - 1].x, snake.tailArr[snake.tailArr.length - 1].y, 32, 32)
+    let snakeHead = snake.tailArr.length - 1
+    let hit = collidePointEllipse(snakeFood.x, snakeFood.y, snake.tailArr[snakeHead].x, snake.tailArr[snakeHead].y, 32, 32)
     if (hit) {
         snake.bodyLength += 1
         generateFood = true;
