@@ -1,17 +1,19 @@
 var bodySquareSize = 24
 // created the snake object with it's proprieties and methods
-var snake = {
-    x: 100,
-    y: 100,
-    speed: 25,
-    tail: [],
-    direction: "",
-    tailSize: 5,
-    growTail: function(x, y) { // method show
-        this.tail.push({x:Math.floor(x), y:Math.floor(y)})
+const snake = new Object();
+snake.x = 100;
+snake.y = 100;
+snake.speed = 25;
+snake.tail = [];
+snake.direction = "";
+snake.tailSize = 5;
+snake.growTail = function(x, y) { // method show
+        x = Math.floor(x)
+        y = Math.floor(y)
+        this.tail.push({x:x, y:y})
         //console.log(`Added to tail: ${x}, ${y}`);
-    }
-};
+}
+
 
   // p5.js setup function
   function setup() {
@@ -25,19 +27,20 @@ var snake = {
 }
 // p5.js draw function
 function draw() {
-    background(64);
+    lifeCheck()
+    background(64)
     stroke(50)
     fill(255)
     snakesDirection()
     snakeMoves()
-    lifeCheck()   
+     
 }
 
 // Draw the snake's tail
 function snakeMoves() {
     for (let i = 0; i < snake.tail.length; ++i) {
         //console.log("drawing")
-        rect(snake.tail[i].x, snake.tail[i].y, bodySquareSize, bodySquareSize);
+        ellipse(snake.tail[i].x, snake.tail[i].y, bodySquareSize, bodySquareSize);
     }
     if (snake.tail.length > snake.tailSize) {
         snake.tail.shift()
@@ -66,18 +69,15 @@ function lifeCheck() {
         console.log("Game over")
         noLoop()
     }
-    //console.log(`Snake x: ${snake.x}`)
-    for (let i = 0; i < snake.tail.length - 1; ++i) {
-        console.log(snake.tail[i].x + " | " + snake.tail[i].y)
-        console.log(snake.tail[snake.tail.length - 1].x + " | " + snake.tail[snake.tail.length - 1].y)
-        if (snake.tail[i].x - bodySquareSize / 2 < snake.tail[snake.tail.length - 1].x + bodySquareSize / 2 &&
-            snake.tail[i].x + bodySquareSize / 2 > snake.tail[snake.tail.length - 1].x - bodySquareSize / 2 &&
-            snake.tail[i].y - bodySquareSize / 2 < snake.tail[snake.tail.length - 1].y + bodySquareSize / 2 &&
-            snake.tail[i].y + bodySquareSize / 2 > snake.tail[snake.tail.length - 1].y - bodySquareSize / 2) 
-            {
-                console.log("Bingo")
-                noLoop()
-            }
+    let headX = snake.tail.slice(snake.tail.length - 1) // save the coordinates of snake's head into a variable
+    let found = snake.tail.slice(0, snake.tail.length - 3) // save the coordinates of snake's body (without head and 2 body parts after that)
+    for (let i = 0; i < found.length; ++i) { // if the head (XY) interesects with any body part(XY) game ends. 
+        if (headX[0].x == found[i].x && headX[0].y == found[i].y) {
+            snake.direction = ""
+            console.log("Game over")
+            noLoop()
+            break;
+        }
     }
 }
 
