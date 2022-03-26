@@ -126,11 +126,17 @@ function foodGenerator() {
         generateFood = false;
         snakeFood.x = random(20, CANVAS_WIDTH - 20);
         snakeFood.y = random(20, CANVAS_HEIGHT - 20);
+        let counter = 0
         for (let i = 0; i < snake.tailArr.length; ++ i) {
-            var d = dist(snakeFood.x, snakeFood.y, snake.tailArr[i].x, snake.tailArr[i].y)
+            let d = dist(snakeFood.x, snakeFood.y, snake.tailArr[i].x, snake.tailArr[i].y)
             if (d < snakeFood.r + snake.bodySize) {
-                console.log("generated food where the snake tail is, retrying")
-                foodGenerator()
+                ++counter
+                console.log("generated food where the snake tail is, retrying...")
+                if (counter < 1000000) { // we try to generate food until counter == 1000000
+                    foodGenerator()
+                } else { // stop the game 
+                    noLoop()
+                }
             }
         }
         ellipse(snakeFood.x, snakeFood.y, FOOD_SIZE, FOOD_SIZE);
