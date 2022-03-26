@@ -9,14 +9,14 @@ const snake = new Object();
 snake.x = 100;
 snake.y = 100;
 snake.speed = 25;
-snake.tail = [];
+snake.tailArr = [];
 snake.direction = "";
-snake.tailSize = 5;
+snake.bodyLength = 5;
 snake.bodySize = BODY_SIZE
 snake.growTail = function(x, y) { // method show
         x = Math.floor(x)
         y = Math.floor(y)
-        this.tail.push({x:x, y:y})
+        this.tailArr.push({x:x, y:y})
         //console.log(`Added to tail: ${x}, ${y}`);
 }
 
@@ -44,17 +44,20 @@ function draw() {
     foodGenerator()
     snakesDirection()
     snakeMoves()
+    console.log(`Snake tail length: ${snake.tailArr.length}`)
+    console.log(`Snake tail size: ${snake.bodyLength}`)
 }
 
 // Draw the snake's tail
 function snakeMoves() {
-    for (let i = 0; i < snake.tail.length; ++i) {
+    while(snake.tailArr.length > snake.bodyLength) {
+        snake.tailArr.shift()
+    }
+    for (let i = 0; i < snake.tailArr.length; ++i) {
         //console.log("drawing")
-        ellipse(snake.tail[i].x, snake.tail[i].y, BODY_SIZE, BODY_SIZE);
+        ellipse(snake.tailArr[i].x, snake.tailArr[i].y, BODY_SIZE, BODY_SIZE);
     }
-    if (snake.tail.length > snake.tailSize) {
-        snake.tail.shift()
-    }
+    
 }
 
 // Grow the snake based on the direction 
@@ -79,8 +82,8 @@ function lifeCheck() {
         console.log("Game over")
         noLoop()
     }
-    let headX = snake.tail.slice(snake.tail.length - 1) // save the coordinates of snake's head into a variable
-    let found = snake.tail.slice(0, snake.tail.length - 3) // save the coordinates of snake's body (without head and 2 body parts after that)
+    let headX = snake.tailArr.slice(snake.tailArr.length - 1) // save the coordinates of snake's head into a variable
+    let found = snake.tailArr.slice(0, snake.tailArr.length - 3) // save the coordinates of snake's body (without head and 2 body parts after that)
     for (let i = 0; i < found.length; ++i) { // if the head (XY) interesects with any body part(XY) game ends. 
         if (headX[0].x == found[i].x && headX[0].y == found[i].y) {
             snake.direction = ""
@@ -123,8 +126,8 @@ function foodGenerator() {
         generateFood = false;
         snakeFood.x = random(20, CANVAS_WIDTH - 20);
         snakeFood.y = random(20, CANVAS_HEIGHT - 20);
-        for (let i = 0; i < snake.tail.length; ++ i) {
-            var d = dist(snakeFood.x, snakeFood.y, snake.tail[i].x, snake.tail[i].y)
+        for (let i = 0; i < snake.tailArr.length; ++ i) {
+            var d = dist(snakeFood.x, snakeFood.y, snake.tailArr[i].x, snake.tailArr[i].y)
             if (d < snakeFood.r + snake.bodySize) {
                 console.log("generated food where the snake tail is, retrying")
                 foodGenerator()
@@ -137,8 +140,9 @@ function foodGenerator() {
 }
 
 function eatFood() {
-    let hit = collidePointEllipse(snakeFood.x, snakeFood.y, snake.tail[snake.tail.length - 1].x, snake.tail[snake.tail.length - 1].y, 32, 32)
+    let hit = collidePointEllipse(snakeFood.x, snakeFood.y, snake.tailArr[snake.tailArr.length - 1].x, snake.tailArr[snake.tailArr.length - 1].y, 32, 32)
     if (hit) {
+        snake.bodyLength += 1
         generateFood = true;
         foodGenerator()
         console.log("collision")
