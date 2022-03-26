@@ -1,4 +1,6 @@
-var bodySquareSize = 24, generateFood = true
+var generateFood = true
+const BODY_SIZE = 24
+const FOOD_SIZE = BODY_SIZE / 2
 const CANVAS_WIDTH = 800
 const CANVAS_HEIGHT = 600
 
@@ -26,28 +28,27 @@ function setup() {
     createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     background(64);
     for (let i = 0; i < 5; ++i) {
-        snake.growTail(snake.x += bodySquareSize, snake.y)
+        snake.growTail(snake.x += BODY_SIZE, snake.y)
     }
     frameRate(5)
 }
 // p5.js draw function
 function draw() {
     lifeCheck()
+    eatFood()
     background(64)
     stroke(50)
     fill(255)
     foodGenerator()
     snakesDirection()
     snakeMoves()
-    
-     
 }
 
 // Draw the snake's tail
 function snakeMoves() {
     for (let i = 0; i < snake.tail.length; ++i) {
         //console.log("drawing")
-        ellipse(snake.tail[i].x, snake.tail[i].y, bodySquareSize, bodySquareSize);
+        ellipse(snake.tail[i].x, snake.tail[i].y, BODY_SIZE, BODY_SIZE);
     }
     if (snake.tail.length > snake.tailSize) {
         snake.tail.shift()
@@ -120,8 +121,17 @@ function foodGenerator() {
         generateFood = false;
         snakeFood.x = random(0, CANVAS_WIDTH - 30);
         snakeFood.y = random(0, CANVAS_HEIGHT - 30);
-        ellipse(snakeFood.x, snakeFood.y, 15, 15);
+        ellipse(snakeFood.x, snakeFood.y, FOOD_SIZE, FOOD_SIZE);
     } else {
-        ellipse(snakeFood.x, snakeFood.y, 15, 15);
+        ellipse(snakeFood.x, snakeFood.y, 12, 12);
+    }
+}
+
+function eatFood() {
+    hit = collidePointEllipse(snakeFood.x, snakeFood.y, snake.tail[snake.tail.length - 1].x, snake.tail[snake.tail.length - 1].y, 32, 32)
+    if (hit) {
+        generateFood = true;
+        foodGenerator()
+        console.log("collision")
     }
 }
